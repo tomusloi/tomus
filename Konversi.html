@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Konversi Bilangan</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      background: url('gif.gif') center center / cover no-repeat fixed;
+
+    }
+    .overlay {
+      background: rgba(0, 0, 0, 0.85);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 700px;
+      background: rgb(16, 5, 58);
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      animation: slideUp 0.7s ease-out;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      color: #f5f7fa;
+      margin-bottom: 30px;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    select:focus, input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 5px rgba(99,102,241,0.3);
+    }
+    button {
+      background: #6366f1;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+    button:hover {
+      background: #4f46e5;
+      transform: scale(1.03);
+    }
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      border-left: 6px solid #6366f1;
+      border-radius: 12px;
+      background: #f8fafc;
+      transform: scale(0.9);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    .result.show {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .result strong {
+      font-size: 18px;
+      color: #1e293b;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .result pre {
+      color: #475569;
+      white-space: pre-line;
+      font-size: 14px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: #64748b;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="container">
+      <h1>🔥 Konversi Bilangan 🔥</h1>
+      <select id="conversionType">
+        <option value="binToOct">Biner → Oktal</option>
+        <option value="binToDec">Biner → Desimal</option>
+        <option value="binToHex">Biner → Heksadesimal</option>
+        <option value="octToBin">Oktal → Biner</option>
+        <option value="octToDec">Oktal → Desimal</option>
+        <option value="octToHex">Oktal → Heksadesimal</option>
+        <option value="decToBin">Desimal → Biner</option>
+        <option value="decToOct">Desimal → Oktal</option>
+        <option value="decToHex">Desimal → Heksadesimal</option>
+        <option value="hexToBin">Heksadesimal → Biner</option>
+        <option value="hexToOct">Heksadesimal → Oktal</option>
+        <option value="hexToDec">Heksadesimal → Desimal</option>
+      </select>
+      <input type="text" id="inputValue" placeholder="Masukkan bilangan...">
+      <button onclick="convert()">Konversi</button>
+      <div id="result" class="result"></div>
+    </div>
+    <div class="footer">© Konversi Bilangan • Naufal&Tomus 💻</div>
+  </div>
+
+  <script>
+    function convert() {
+      const type = document.getElementById('conversionType').value;
+      const input = document.getElementById('inputValue').value.trim();
+      const box = document.getElementById('result');
+      let number, result = '', steps = '';
+
+      function isValid(inp, base, allowNeg=false) {
+        const re = {
+          2: /^[01]+$/, 8: /^[0-7]+$/, 10: allowNeg ? /^-?\d+$/ : /^\d+$/, 16:/^[0-9a-fA-F]+$/
+        };
+        return re[base].test(inp);
+      }
+
+      try {
+        switch(type) {
+          case 'binToOct':
+            if(!isValid(input,2)) throw 'Biner tidak valid';
+            number = parseInt(input,2);
+            result = number.toString(8);
+            steps = `1. Biner → Desimal: ${input} → ${number}\n2. Desimal → Oktal: ${number} → ${result}`;
+            break;
+          case 'binToDec':
+            if(!isValid(input,2)) throw 'Biner tidak valid';
+            number = parseInt(input,2);
+            result = number.toString(10);
+            steps = `1. Biner → Desimal: ${input} → ${result}`;
+            break;
+          case 'binToHex':
+            if(!isValid(input,2)) throw 'Biner tidak valid';
+            number = parseInt(input,2);
+            result = number.toString(16).toUpperCase();
+            steps = `1. Biner → Desimal: ${input} → ${number}\n2. Desimal → Hex: ${number} → ${result}`;
+            break;
+          case 'octToBin':
+            if(!isValid(input,8)) throw 'Oktal tidak valid';
+            number = parseInt(input,8);
+            result = number.toString(2);
+            steps = `1. Oktal → Desimal: ${input} → ${number}\n2. Desimal → Biner: ${number} → ${result}`;
+            break;
+          case 'octToDec':
+            if(!isValid(input,8)) throw 'Oktal tidak valid';
+            number = parseInt(input,8);
+            result = number.toString(10);
+            steps = `1. Oktal → Desimal: ${input} → ${result}`;
+            break;
+          case 'octToHex':
+            if(!isValid(input,8)) throw 'Oktal tidak valid';
+            number = parseInt(input,8);
+            result = number.toString(16).toUpperCase();
+            steps = `1. Oktal → Desimal: ${input} → ${number}\n2. Desimal → Hex: ${number} → ${result}`;
+            break;
+          case 'decToBin':
+            if(!isValid(input,10,true)) throw 'Desimal tidak valid';
+            number = parseInt(input);
+            result = Math.abs(number).toString(2);
+            steps = `1. Ambil nilai absolut: ${Math.abs(number)}\n2. Desimal → Biner: ${Math.abs(number)} → ${result}`;
+            break;
+          case 'decToOct':
+            if(!isValid(input,10,true)) throw 'Desimal tidak valid';
+            number = parseInt(input);
+            result = Math.abs(number).toString(8);
+            steps = `1. Ambil nilai absolut: ${Math.abs(number)}\n2. Desimal → Oktal: ${Math.abs(number)} → ${result}`;
+            break;
+          case 'decToHex':
+            if(!isValid(input,10,true)) throw 'Desimal tidak valid';
+            number = parseInt(input);
+            result = Math.abs(number).toString(16).toUpperCase();
+            steps = `1. Ambil nilai absolut: ${Math.abs(number)}\n2. Desimal → Hex: ${Math.abs(number)} → ${result}`;
+            break;
+          case 'hexToBin':
+            if(!isValid(input,16)) throw 'Hexa tidak valid';
+            number = parseInt(input,16);
+            result = number.toString(2);
+            steps = `1. Hexa → Desimal: ${input.toUpperCase()} → ${number}\n2. Desimal → Biner: ${number} → ${result}`;
+            break;
+          case 'hexToOct':
+            if(!isValid(input,16)) throw 'Hexa tidak valid';
+            number = parseInt(input,16);
+            result = number.toString(8);
+            steps = `1. Hexa → Desimal: ${input.toUpperCase()} → ${number}\n2. Desimal → Oktal: ${number} → ${result}`;
+            break;
+          case 'hexToDec':
+            if(!isValid(input,16)) throw 'Hexa tidak valid';
+            number = parseInt(input,16);
+            result = number.toString(10);
+            steps = `1. Hexa → Desimal: ${input.toUpperCase()} → ${result}`;
+            break;
+        }
+        box.innerHTML = `<strong>Hasil: ${result}</strong><pre>${steps}</pre>`;
+        box.classList.add('show');
+      } catch(e) {
+        box.innerHTML = `<strong style="color:red;">❌ Error:</strong> ${e}`;
+        box.classList.add('show');
+      }
+    }
+  </script>
+</body>
+</html>
